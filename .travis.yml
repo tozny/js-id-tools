@@ -4,7 +4,7 @@ git:
   quiet: true
 branches:
   only:
-    - master
+    -  trunk
     - /^test\/.*$/
   except:
     - /^hack\/.*$/
