@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/tozny/js-id-tools.svg?branch=trunk)](https://travis-ci.org/tozny/js-id-tools)
 # TozID Tools
 
 A TozID extension that provides tools for relying parties.
