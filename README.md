@@ -2,7 +2,7 @@
 
 A TozID extension that provides tools for relying parties.
 
-## Quickstart
+## Quick Start
 
 Install the TozID tools extension
 

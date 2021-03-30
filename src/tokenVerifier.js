@@ -15,7 +15,7 @@ class TokenVerifier {
    * Options allows behavioral control over the internal behavior of the
    * validator. Available options are:
    *
-   * - `jwksTimeout` How long in seconds a key from the JWKS endpoint will get cached. Defualt: 86400 (1 day)
+   * - `jwksTimeout` How long in seconds a key from the JWKS endpoint will get cached. Default: 86400 (1 day)
    * - `jwksCache` A more robust cache can be provided allowing more robust caching backend ors caches share across verifiers. Default: MemoryCache
    *
    * @param {object} realm The Tozny Identity realm object
@@ -128,7 +128,7 @@ class TokenVerifier {
       const tokenScopes = payload.scope.split(' ')
       const missingScopes = []
       for (let scope of requiredScopes) {
-        if (! tokenScopes.includes(scope)) {
+        if (!tokenScopes.includes(scope)) {
           missingScopes.push(scope)
         }
       }
@@ -185,7 +185,7 @@ class TokenVerifier {
    * Cache expiration times are controlled by the jwksTimeout option.
    *
    * @param {string} keyID The Key ID to find in the cache or JWKS endpoint
-   * @param {bool} refresh Whther to force a cache refresh, even on a hit
+   * @param {bool} refresh Whether to force a cache refresh, even on a hit
    * @returns {JWK} A JSON Web Key object for use in validating a token signature
    */
   async getKey(keyID, refresh = false) {
