@@ -1,0 +1,82 @@
+{
+  "name": "@toznysecure/id-tools",
+  "version": "1.0.0",
+  "description": "A Tozny SDK extension for server-side identity applications",
+  "main": "index.js",
+  "engines": {
+    "node": ">= 10"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/tozny/js-id-tools.git"
+  },
+  "keywords": [
+    "tozny",
+    "encryption",
+    "security",
+    "identity",
+    "server",
+    "rp",
+    "oidc"
+  ],
+  "author": {
+    "name": "Tozny, LLC",
+    "email": "info@tozny.com",
+    "url": "https://tozny.com"
+  },
+  "license": "SEE LICENSE IN LICENSE",
+  "bugs": {
+    "url": "https://github.com/tozny/js-id-tools/issues"
+  },
+  "homepage": "https://github.com/tozny/js-id-tools#readme",
+  "devDependencies": {
+    "@toznysecure/sdk": "file:../js-sdk",
+    "dotenv": "^8.2.0",
+    "eslint": "^7.21.0",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-jest": "^24.2.0",
+    "eslint-plugin-prettier": "^3.3.1",
+    "husky": "^5.2.0",
+    "jest": "^26.6.3",
+    "jest-cli": "^26.6.3",
+    "jest-fetch-mock": "^3.0.3",
+    "lint-staged": "^10.5.4",
+    "nock": "^13.0.11",
+    "prettier": "^2.2.1",
+    "uuid": "^8.3.2"
+  },
+  "jest": {
+    "testMatch": [
+      "**/__tests__/?(*.)+(spec|test).[jt]s?(x)"
+    ],
+    "automock": false,
+    "setupFiles": [
+      "./__tests__/config/setup.js"
+    ],
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+      "jose/jwk/parse": "<rootDir>/node_modules/jose/dist/node/cjs/jwk/parse.js",
+      "jose/jwt/verify": "<rootDir>/node_modules/jose/dist/node/cjs/jwt/verify.js",
+      "jose/jwt/sign": "<rootDir>/node_modules/jose/dist/node/cjs/jwt/sign.js",
+      "jose/util/errors": "<rootDir>/node_modules/jose/dist/node/cjs/util/errors.js"
+    }
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ]
+  },
+  "dependencies": {
+    "cross-fetch": "^3.1.2",
+    "jose": "^3.11.1"
+  }
+}

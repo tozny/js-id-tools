@@ -1,0 +1,5 @@
+coverage
+__tests__
+examples
+dist
+.eslintrc.js
