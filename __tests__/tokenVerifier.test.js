@@ -94,7 +94,7 @@ describe('ID Tools', () => {
       type: values.typ, // the type of token expect to have been issued
       scope: 'openid email profile', // the scope of the token claims expected (space separated list)
       sessionState: values.session_state, // the session state id the token is expected to contain
-      authContext: values.acr, // the authentication context class the token is expected to have
+      authenticationContext: values.acr, // the authentication context class the token is expected to have
       keyID: values.kid, // the key ID the token is expected to have been signed with
       tokenType: 'JWT', // the token is expected to be a JSON Web Token
     })
