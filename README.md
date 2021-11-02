@@ -99,4 +99,4 @@ const {claims, headers} = await verifier.decode(token)
 ```
 ## Terms of Service
 
-Your use of the Tozny JavaScript SDK must abide by our [Terms of Service](https://github.com/tozny/e3db-java/blob/master/terms.pdf), as detailed in the linked document.
+Your use of the Tozny JavaScript SDK must abide by our [Terms of Service](https://tozny.com/tozny-terms-of-service/), as detailed in the linked document.
