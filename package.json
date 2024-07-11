@@ -56,13 +56,7 @@
     "setupFiles": [
       "./__tests__/config/setup.js"
     ],
-    "testEnvironment": "node",
-    "moduleNameMapper": {
-      "jose/jwk/parse": "<rootDir>/node_modules/jose/dist/node/cjs/jwk/parse.js",
-      "jose/jwt/verify": "<rootDir>/node_modules/jose/dist/node/cjs/jwt/verify.js",
-      "jose/jwt/sign": "<rootDir>/node_modules/jose/dist/node/cjs/jwt/sign.js",
-      "jose/util/errors": "<rootDir>/node_modules/jose/dist/node/cjs/util/errors.js"
-    }
+    "testEnvironment": "node"
   },
   "husky": {
     "hooks": {

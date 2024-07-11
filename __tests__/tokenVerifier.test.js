@@ -1,6 +1,6 @@
 const nock = require('nock')
 const utils = require('./utils')
-
+const { importJWK } = require('jose')
 const Tozny = require('@toznysecure/sdk/node')
 const IDTools = require('../index')
 
@@ -43,7 +43,7 @@ afterAll(async () => {
 
 describe('ID Tools', () => {
   it('will decode a token', async () => {
-    const {token, values} = await utils.makeTestJWT(
+    const { token, values } = await utils.makeTestJWT(
       utils.jwkMock,
       {
         azp: appName,
@@ -51,7 +51,7 @@ describe('ID Tools', () => {
       }
     )
 
-    const {claims, headers} = await verifier.decode(token)
+    const { claims, headers } = await verifier.decode(token)
     // Verify some of the basic token claims and headers that came back from decode
     expect(headers.kid).toBe(utils.jwkMock.kid)
     expect(claims.sub).toBe(values.sub)
@@ -61,7 +61,7 @@ describe('ID Tools', () => {
   })
 
   it('will verify a token', async () => {
-    const {token, values} = await utils.makeTestJWT(
+    const { token, values } = await utils.makeTestJWT(
       utils.jwkMock,
       {
         azp: appName,
@@ -69,7 +69,7 @@ describe('ID Tools', () => {
       }
     )
 
-    const {claims} = await verifier.verify(token)
+    const { claims } = await verifier.verify(token)
     // Verify some of the basic token claims came back from verify
     expect(claims.sub).toBe(values.sub)
     expect(claims.jti).toBe(values.jti)
@@ -78,7 +78,7 @@ describe('ID Tools', () => {
   })
 
   it('will verify a token with all options present', async () => {
-    const {token, values} = await utils.makeTestJWT(
+    const { token, values } = await utils.makeTestJWT(
       utils.jwkMock,
       {
         azp: appName,
@@ -87,7 +87,7 @@ describe('ID Tools', () => {
       }
     )
 
-    const {claims} = await verifier.verify(token, {
+    const { claims } = await verifier.verify(token, {
       authorizedParty: appName, // the application this token is expected to be issued for
       subject: values.sub, // the user uuid this token is expected to be issued for
       nonce: values.nonce, // the nonce expected to have been used for this authentication flow
@@ -104,7 +104,7 @@ describe('ID Tools', () => {
   })
 
   it('will verify a different algorithms', async () => {
-    const {token, values} = await utils.makeTestJWT(
+    const { token, values } = await utils.makeTestJWT(
       utils.jwkMock3,
       {
         azp: appName,
@@ -112,13 +112,13 @@ describe('ID Tools', () => {
       }
     )
 
-    const {claims} = await verifier.verify(token)
+    const { claims } = await verifier.verify(token)
     // Verify the token ID matches expected
     expect(claims.jti).toBe(values.jti)
   })
 
   it('will reject a token with an unknown kid', async () => {
-    const {token} = await utils.makeTestJWT(
+    const { token } = await utils.makeTestJWT(
       utils.jwkMock,
       {
         azp: appName,
@@ -132,7 +132,7 @@ describe('ID Tools', () => {
   })
 
   it('will reject a token with a invalid signature', async () => {
-    const {token} = await utils.makeTestJWT(
+    const { token } = await utils.makeTestJWT(
       utils.jwkMock2,
       {
         azp: appName,
@@ -146,7 +146,7 @@ describe('ID Tools', () => {
   })
 
   it('will reject an expired token', async () => {
-    const {token} = await utils.makeTestJWT(
+    const { token } = await utils.makeTestJWT(
       utils.jwkMock,
       {
         azp: appName,
@@ -162,7 +162,7 @@ describe('ID Tools', () => {
   })
 
   it('will should respect a tolerance window', async () => {
-    const {token, values} = await utils.makeTestJWT(
+    const { token, values } = await utils.makeTestJWT(
       utils.jwkMock,
       {
         azp: appName,
@@ -174,7 +174,7 @@ describe('ID Tools', () => {
     )
 
     // 5 second expired token is within the 10 second tolerance
-    const {claims} = await verifier.verify(token, {
+    const { claims } = await verifier.verify(token, {
       clockTolerance: 10 // 10 second tolerance
     })
     // Verify the token ID
@@ -182,7 +182,7 @@ describe('ID Tools', () => {
   })
 
   it('should reject on an incorrect issuer', async () => {
-    const {token} = await utils.makeTestJWT(
+    const { token } = await utils.makeTestJWT(
       utils.jwkMock,
       {
         azp: appName,
@@ -196,7 +196,7 @@ describe('ID Tools', () => {
   })
 
   it('will verify the authorized party', async () => {
-    const {token} = await utils.makeTestJWT(
+    const { token } = await utils.makeTestJWT(
       utils.jwkMock,
       {
         azp: 'differentapp', // this will not match our app
@@ -211,7 +211,7 @@ describe('ID Tools', () => {
   })
 
   it('will fail to verify an invalid subject', async () => {
-    const {token} = await utils.makeTestJWT(
+    const { token } = await utils.makeTestJWT(
       utils.jwkMock,
       {
         azp: appName,
@@ -226,7 +226,7 @@ describe('ID Tools', () => {
   })
 
   it('will fail to verify a invalid nonce', async () => {
-    const {token} = await utils.makeTestJWT(
+    const { token } = await utils.makeTestJWT(
       utils.jwkMock,
       {
         azp: appName,
@@ -241,7 +241,7 @@ describe('ID Tools', () => {
   })
 
   it('will fail to verify a invalid type', async () => {
-    const {token} = await utils.makeTestJWT(
+    const { token } = await utils.makeTestJWT(
       utils.jwkMock,
       {
         azp: appName,
@@ -256,7 +256,7 @@ describe('ID Tools', () => {
   })
 
   it('will fail to validate if an expected scope is missing', async () => {
-    const {token} = await utils.makeTestJWT(
+    const { token } = await utils.makeTestJWT(
       utils.jwkMock,
       {
         azp: appName,
@@ -271,7 +271,7 @@ describe('ID Tools', () => {
   })
 
   it('will validate if the token contains extra scopes', async () => {
-    const {token, values} = await utils.makeTestJWT(
+    const { token, values } = await utils.makeTestJWT(
       utils.jwkMock,
       {
         azp: appName,
@@ -281,7 +281,7 @@ describe('ID Tools', () => {
     )
 
     // This will succeed because only the openid scope is required
-    const {claims} = await verifier.verify(token, {
+    const { claims } = await verifier.verify(token, {
       scope: 'openid'
     })
     // Verify the token ID
@@ -289,7 +289,7 @@ describe('ID Tools', () => {
   })
 
   it('will fail to verify an invalid session state', async () => {
-    const {token} = await utils.makeTestJWT(
+    const { token } = await utils.makeTestJWT(
       utils.jwkMock,
       {
         azp: appName,
@@ -304,7 +304,7 @@ describe('ID Tools', () => {
   })
 
   it('will fail to verify an invalid authentication context', async () => {
-    const {token} = await utils.makeTestJWT(
+    const { token } = await utils.makeTestJWT(
       utils.jwkMock,
       {
         azp: appName,
@@ -319,7 +319,7 @@ describe('ID Tools', () => {
   })
 
   it('will fail to verify an invalid key ID', async () => {
-    const {token} = await utils.makeTestJWT(
+    const { token } = await utils.makeTestJWT(
       utils.jwkMock,
       {
         azp: appName,
@@ -358,9 +358,9 @@ describe('ID Tools', () => {
       '',
       singleApiDomain
     )
-    const singleTestVerifier = Tozny.idTools.verifier(singleTestRealm, {logInfo: true})
+    const singleTestVerifier = Tozny.idTools.verifier(singleTestRealm, { logInfo: true })
 
-    const {token, values} = await utils.makeTestJWT(
+    const { token, values } = await utils.makeTestJWT(
       utils.jwkMock,
       {
         azp: singleApp,
@@ -370,7 +370,7 @@ describe('ID Tools', () => {
 
     // Validate a token twice, this should work since the returns are caches in memory
     await singleTestVerifier.verify(token, { logInfo: true })
-    const {claims} = await singleTestVerifier.verify(token, { logInfo: true })
+    const { claims } = await singleTestVerifier.verify(token, { logInfo: true })
     // Verify the token ID
     expect(claims.jti).toBe(values.jti)
     // Verify the nock mocks are done
@@ -408,7 +408,7 @@ describe('ID Tools', () => {
     const singleTestVerifier = Tozny.idTools.verifier(singleTestRealm)
     const secondTestVerifier = Tozny.idTools.verifier(singleTestRealm) // allows uncached failure check
 
-    const {token, values} = await utils.makeTestJWT(
+    const { token, values } = await utils.makeTestJWT(
       utils.jwkMock,
       {
         azp: singleApp,
@@ -417,7 +417,7 @@ describe('ID Tools', () => {
     )
 
     // Validate a token twice, this should work since the returns are caches in memory
-    const {claims} = await singleTestVerifier.verify(token)
+    const { claims } = await singleTestVerifier.verify(token)
     // Verify the token ID
     expect(claims.jti).toBe(values.jti)
 
@@ -451,7 +451,7 @@ describe('ID Tools', () => {
       singleApiDomain
     )
     const singleTestVerifier = Tozny.idTools.verifier(singleTestRealm)
-    const {token, values} = await utils.makeTestJWT(
+    const { token, values } = await utils.makeTestJWT(
       utils.jwkMock,
       {
         azp: singleApp,
@@ -460,7 +460,7 @@ describe('ID Tools', () => {
     )
 
     // Validate a token twice, this should work since the returns are caches in memory
-    const {claims} = await singleTestVerifier.verify(token)
+    const { claims } = await singleTestVerifier.verify(token)
     // Verify the token ID
     expect(claims.jti).toBe(values.jti)
     // Verify the nock mock for info is done, but the jwks is not
@@ -506,7 +506,7 @@ describe('ID Tools', () => {
       singleApiDomain
     )
     const singleTestVerifier = Tozny.idTools.verifier(singleTestRealm)
-    const {token, values} = await utils.makeTestJWT(
+    const { token, values } = await utils.makeTestJWT(
       utils.jwkMock,
       {
         azp: singleApp,
@@ -515,7 +515,7 @@ describe('ID Tools', () => {
     )
 
     // Validate a token twice, this should work since the returns are caches in memory
-    const {claims} = await singleTestVerifier.verify(token)
+    const { claims } = await singleTestVerifier.verify(token)
     // Verify the token ID
     expect(claims.jti).toBe(values.jti)
     // Verify the nock mock for info is done, but the jwks is not
@@ -525,7 +525,7 @@ describe('ID Tools', () => {
     // Save out the original expiration date
     const originalExpr = singleTestVerifier.jwksCache._items[utils.jwkMock.kid].expires
     // A call with the second verifier should fail since the mock is only set up to respond once
-    const {token: token2} = await utils.makeTestJWT(
+    const { token: token2 } = await utils.makeTestJWT(
       utils.jwkMock,
       {
         azp: singleApp,

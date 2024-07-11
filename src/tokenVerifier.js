@@ -1,8 +1,7 @@
 const fetch = require('cross-fetch')
 const MemoryCache = require('./memoryCache')
-const { parseJwk } = require('jose/jwk/parse')
-const { jwtVerify } = require('jose/jwt/verify')
-const { JWTClaimValidationFailed, JWTInvalid } = require('jose/util/errors')
+const { importJWK } = require('jose');
+const { jwtVerify, SignJWT, errors } = require('jose');
 
 class TokenVerifier {
   /**
@@ -203,7 +202,7 @@ class TokenVerifier {
       const expires = new Date(Date.now() + this.jwksTimeout * 1000)
       this.jwksCache.clear()
       for (let key of set.keys) {
-        const parsed = await parseJwk(key)
+        const parsed = await importJWK(key)
         if (key.kid === keyID) {
           cached = parsed
         }
