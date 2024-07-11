@@ -4,12 +4,12 @@ git:
   quiet: true
 branches:
   only:
-    -  trunk
+    - trunk
     - /^test\/.*$/
   except:
     - /^hack\/.*$/
 script: npx jest
 jobs:
   include:
-    - node_js: 12
-    - node_js: 14
+    - node_js: 18
+    - node_js: 16
