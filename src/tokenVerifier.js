@@ -1,7 +1,7 @@
 const fetch = require('cross-fetch')
 const MemoryCache = require('./memoryCache')
-const { importJWK } = require('jose');
-const { jwtVerify, SignJWT, errors } = require('jose');
+const { importJWK } = require('jose')
+const { jwtVerify, SignJWT, errors } = require('jose')
 
 class TokenVerifier {
   /**
