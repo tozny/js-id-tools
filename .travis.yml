@@ -12,4 +12,6 @@ script: npx jest
 jobs:
   include:
     - node_js: 18
+      env: TEST_TARGET=node
     - node_js: 16
+      env: TEST_TARGET=node
