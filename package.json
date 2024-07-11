@@ -1,6 +1,6 @@
 {
   "name": "@toznysecure/id-tools",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "A Tozny SDK extension for server-side identity applications",
   "main": "index.js",
   "engines": {
