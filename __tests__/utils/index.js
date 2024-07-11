@@ -1,5 +1,5 @@
-const { SignJWT } = require('jose/jwt/sign')
-const { parseJwk } = require('jose/jwk/parse')
+const { importJWK } = require('jose');
+const { jwtVerify, SignJWT, errors } = require('jose');
 const { v4: uuidv4 } = require('uuid');
 
 
@@ -93,7 +93,7 @@ function saltString(str) {
 }
 
 async function makeTestJWT(signingKey, options = {}) {
-  const privateKey = await parseJwk(signingKey)
+  const privateKey = await importJWK(signingKey)
   const values = {
     jti: options.jti || uuidv4(),
     sub: options.sub || uuidv4(),
@@ -124,7 +124,7 @@ async function makeTestJWT(signingKey, options = {}) {
   }
 
   let token = new SignJWT(claims)
-    .setProtectedHeader({alg: values.alg, kid: values.kid, typ: 'JWT'})
+    .setProtectedHeader({ alg: values.alg, kid: values.kid, typ: 'JWT' })
     .setSubject(values.sub)
     .setJti(values.jti)
     .setIssuedAt(values.iat)
@@ -137,7 +137,7 @@ async function makeTestJWT(signingKey, options = {}) {
 
   token = await token.sign(privateKey)
 
-  return {values, token}
+  return { values, token }
 }
 
 module.exports = {
