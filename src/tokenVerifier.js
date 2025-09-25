@@ -86,7 +86,7 @@ class TokenVerifier {
         "unexpected 'azp' claim value",
         payload,
         'azp',
-        'check_failed',
+        'check_failed'
       )
     }
     if (options.nonce && payload.nonce !== options.nonce) {
@@ -94,7 +94,7 @@ class TokenVerifier {
         "unexpected 'nonce' claim value",
         payload,
         'nonce',
-        'check_failed',
+        'check_failed'
       )
     }
     if (options.type && payload.typ !== options.type) {
@@ -102,7 +102,7 @@ class TokenVerifier {
         "unexpected 'typ' claim value",
         payload,
         'typ',
-        'check_failed',
+        'check_failed'
       )
     }
     if (
@@ -113,7 +113,7 @@ class TokenVerifier {
         "unexpected 'acr' claim value",
         payload,
         'acr',
-        'check_failed',
+        'check_failed'
       )
     }
     if (
@@ -124,7 +124,7 @@ class TokenVerifier {
         "unexpected 'session_state' claim value",
         payload,
         'session_state',
-        'check_failed',
+        'check_failed'
       )
     }
     if (options.scope) {
@@ -141,7 +141,7 @@ class TokenVerifier {
           `missing values (${missingScopes.join(', ')}) in the 'scope' claim`,
           payload,
           'scope',
-          'check_failed',
+          'check_failed'
         )
       }
     }
