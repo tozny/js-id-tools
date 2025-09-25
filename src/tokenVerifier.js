@@ -84,25 +84,25 @@ class TokenVerifier {
     if (options.authorizedParty && payload.azp !== options.authorizedParty) {
       throw new errors.JWTClaimValidationFailed(
         "unexpected 'azp' claim value",
+        payload,
         'azp',
         'check_failed',
-        payload
       )
     }
     if (options.nonce && payload.nonce !== options.nonce) {
       throw new errors.JWTClaimValidationFailed(
         "unexpected 'nonce' claim value",
+        payload,
         'nonce',
         'check_failed',
-        payload
       )
     }
     if (options.type && payload.typ !== options.type) {
       throw new errors.JWTClaimValidationFailed(
         "unexpected 'typ' claim value",
+        payload,
         'typ',
         'check_failed',
-        payload
       )
     }
     if (
@@ -111,9 +111,9 @@ class TokenVerifier {
     ) {
       throw new errors.JWTClaimValidationFailed(
         "unexpected 'acr' claim value",
+        payload,
         'acr',
         'check_failed',
-        payload
       )
     }
     if (
@@ -122,9 +122,9 @@ class TokenVerifier {
     ) {
       throw new errors.JWTClaimValidationFailed(
         "unexpected 'session_state' claim value",
+        payload,
         'session_state',
         'check_failed',
-        payload
       )
     }
     if (options.scope) {
@@ -139,9 +139,9 @@ class TokenVerifier {
       if (missingScopes.length > 0) {
         throw new errors.JWTClaimValidationFailed(
           `missing values (${missingScopes.join(', ')}) in the 'scope' claim`,
+          payload,
           'scope',
           'check_failed',
-          payload
         )
       }
     }
