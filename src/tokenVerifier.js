@@ -82,22 +82,25 @@ class TokenVerifier {
     )
     // Additional validation
     if (options.authorizedParty && payload.azp !== options.authorizedParty) {
-      throw new JWTClaimValidationFailed(
+      throw new errors.JWTClaimValidationFailed(
         "unexpected 'azp' claim value",
+        payload,
         'azp',
         'check_failed'
       )
     }
     if (options.nonce && payload.nonce !== options.nonce) {
-      throw new JWTClaimValidationFailed(
+      throw new errors.JWTClaimValidationFailed(
         "unexpected 'nonce' claim value",
+        payload,
         'nonce',
         'check_failed'
       )
     }
     if (options.type && payload.typ !== options.type) {
-      throw new JWTClaimValidationFailed(
+      throw new errors.JWTClaimValidationFailed(
         "unexpected 'typ' claim value",
+        payload,
         'typ',
         'check_failed'
       )
@@ -106,8 +109,9 @@ class TokenVerifier {
       options.authenticationContext &&
       payload.acr !== options.authenticationContext
     ) {
-      throw new JWTClaimValidationFailed(
+      throw new errors.JWTClaimValidationFailed(
         "unexpected 'acr' claim value",
+        payload,
         'acr',
         'check_failed'
       )
@@ -116,8 +120,9 @@ class TokenVerifier {
       options.sessionState &&
       payload.session_state !== options.sessionState
     ) {
-      throw new JWTClaimValidationFailed(
+      throw new errors.JWTClaimValidationFailed(
         "unexpected 'session_state' claim value",
+        payload,
         'session_state',
         'check_failed'
       )
@@ -132,15 +137,16 @@ class TokenVerifier {
         }
       }
       if (missingScopes.length > 0) {
-        throw new JWTClaimValidationFailed(
+        throw new errors.JWTClaimValidationFailed(
           `missing values (${missingScopes.join(', ')}) in the 'scope' claim`,
+          payload,
           'scope',
           'check_failed'
         )
       }
     }
     if (options.keyID && protectedHeader.kid !== options.keyID) {
-      throw new JWTInvalid(
+      throw new errors.JWTInvalid(
         `expected token to be signed with ${options.keyID} but it was signed with ${protectedHeader.kid}`
       )
     }
@@ -156,13 +162,13 @@ class TokenVerifier {
    */
   decode(token) {
     if (typeof token !== 'string') {
-      throw new JWTInvalid(
+      throw new errors.JWTInvalid(
         'A JWT is a string of 3 period separated base64 values'
       )
     }
     const { 0: encodedHeader, 1: encodedClaims, length } = token.split('.')
     if (length !== 3) {
-      throw new JWTInvalid(
+      throw new errors.JWTInvalid(
         'A JWT is a string of 3 period separated base64 values'
       )
     }
